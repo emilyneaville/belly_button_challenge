@@ -27,7 +27,7 @@ function init() {
                 .text(name)
                 .property("value");
 
-        // Use the first sample to build the initial panel
+        // Use the first sample to build the initial dashboard
         let firstSample = names[0];
         buildDemoPanel(firstSample);
         buildCharts(firstSample);
@@ -103,7 +103,7 @@ function buildCharts(subjectId) {
             title: "Top 10 Bacteria Cultures Found",
             xaxis: {title: "Sample Value"},
             height: 500,
-            width: 700
+            width: 950
         };
 
         // Render the bar chart to the div tag with id "bar"
