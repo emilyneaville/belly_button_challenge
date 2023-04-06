@@ -30,6 +30,7 @@ function init() {
         // Use the first sample to build the initial panel
         let firstSample = names[0];
         buildDemoPanel(firstSample);
+        buildCharts(firstSample);
 
         });
     });
@@ -79,12 +80,14 @@ function buildCharts(subjectId) {
         let filteredSample = samples[0];
 
         // Create variables that hold the otu_ids, otu_labels, and sample_values of the first sample
-        // Slice the first 10 OTUs for plotting
+        // Slice the first 10 OTUs for x axis
+        // Reverse the array to accomodate Plotly's defaults
+        let barValues = filteredSample.sample_values.slice(0, 10).reverse();
+        // Again, slice the first 10 OTUs for y axis
         // .map() to add "OTU" to the id
         // Reverse the array to accomodate Plotly's defaults
         let barIds = filteredSample.otu_ids.slice(0, 10).map(id => `OTU ${id}`).reverse();
         let barLabels = filteredSample.otu_labels;
-        let barValues = filteredSample.sample_values.slice(0, 10).reverse();
 
         // Create the trace for the bar chart
         let barData = [{
@@ -105,6 +108,36 @@ function buildCharts(subjectId) {
 
         // Render the bar chart to the div tag with id "bar"
         Plotly.newPlot("bar", barData, barLayout);
+
+        // Bubble chart variables
+        let bubbleIds = filteredSample.otu_ids;
+        let bubbleValues = filteredSample.sample_values;
+        let bubbleLabels = filteredSample.otu_labels;
+
+        // Create the trace for the bubble chart
+        let bubbleData = [{
+            x: bubbleIds,
+            y: bubbleValues,
+            text: bubbleLabels,
+            mode: "markers",
+            marker: {
+                size: bubbleValues,
+                color: bubbleIds,
+                colorscale: "Jet"
+            }
+        }];
+
+        // Apply a layout to the bubble chart
+        let bubbleLayout = {
+            title: "Bacteria Cultures Per Sample",
+            xaxis: {title: "OTU ID"},
+            yaxis: {title: "Sample Value"},
+            height: 500,
+            width: 1200
+        };
+
+        // Render the bubble chart to the div tag with id "bubble"
+        Plotly.newPlot("bubble", bubbleData, bubbleLayout);
 
     }); 
 };
